@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Para Juan</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Caveat:wght@600&family=Figtree:wght@400;600&display=swap">
+<style>
+/* Layout: una sola columna angosta, como una carta; cada hermano es una "postal" levemente inclinada que se endereza al tocarla. */
+:root{
+  --bg:#e9f0f7; --paper:#fbfdff; --ink:#14284a; --soft:#56688a; --line:#c9d6e6;
+  --sun:#f5b82e; --sun-ink:#3a2a00;
+  --display:"Bricolage Grotesque","Trebuchet MS",sans-serif;
+  --hand:"Caveat","Segoe Script",cursive;
+  --body:"Figtree",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1830; --paper:#16254a; --ink:#eef3fb; --soft:#a5b4d0; --line:#2b3d6b; --sun:#f7c443; --sun-ink:#2b1f00; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1830; --paper:#16254a; --ink:#eef3fb; --soft:#a5b4d0; --line:#2b3d6b; --sun:#f7c443; --sun-ink:#2b1f00; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;padding-inline:20px;padding-block:40px 56px}
+main{max-width:34rem;margin-inline:auto;display:flex;flex-direction:column;gap:36px}
+header{display:flex;flex-direction:column;gap:14px}
+.stamps{display:flex;flex-wrap:wrap;gap:10px}
+.stamps svg{width:52px;height:52px;border-radius:8px;border:1px solid var(--line);display:block}
+.stamps svg:nth-child(odd){transform:rotate(-4deg)}
+.stamps svg:nth-child(even){transform:rotate(3deg)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(3rem,16vw,5rem);line-height:.95;margin:0;letter-spacing:-.02em;text-wrap:balance}
+.lead{font-size:1.15rem;margin:0;max-width:28rem}
+.cards{display:flex;flex-direction:column;gap:22px;list-style:none;margin:0;padding:0}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:22px;display:flex;flex-direction:column;gap:12px;transition:transform .2s}
+.card:nth-child(odd){transform:rotate(-1deg)}
+.card:nth-child(even){transform:rotate(1deg)}
+.card:hover,.card:focus-within{transform:none}
+.name{font-family:var(--hand);font-size:2.2rem;line-height:1;margin:0}
+.msg{margin:0;color:var(--soft)}
+.play{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;background:var(--sun);color:var(--sun-ink);font-weight:600;text-decoration:none;padding:12px 18px;border-radius:999px;min-height:48px}
+.play:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.play svg{width:14px;height:14px;fill:currentColor}
+.wait{align-self:flex-start;color:var(--soft);border:1px dashed var(--line);padding:10px 16px;border-radius:999px;font-size:.95rem}
+footer{font-family:var(--hand);font-size:1.7rem;line-height:1.2;margin:0}
+@media (prefers-reduced-motion:reduce){.card{transition:none;transform:none!important}}
+.vid{width:100%;aspect-ratio:16/9;border:0;border-radius:4px;background:#000}
+</style>
+
+</head>
+<body>
+<main>
+  <header>
+    <div class="stamps" aria-hidden="true">
+      <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#14284a"/><path d="M20 12v18.5a5 5 0 1 1-3-4.6V12l16-3v17.5a5 5 0 1 1-3-4.6V15z" fill="#f5b82e"/></svg>
+      <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#0b3b8f"/><rect y="16" width="48" height="16" fill="#f7c400"/></svg>
+      <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#74acdf"/><rect y="16" width="48" height="16" fill="#ffffff"/><circle cx="24" cy="24" r="4.5" fill="#f6b40e"/></svg>
+      <svg viewBox="0 0 48 48"><rect width="48" height="48" fill="#c60b1e"/><rect y="12" width="48" height="24" fill="#ffc400"/></svg>
+    </div>
+    <h1>Para Juan</h1>
+    <p class="lead" id="apertura"></p>
+  </header>
+  <ul class="cards" id="cards"></ul>
+  <p id="cierre" hidden></p>
+  <footer id="firma"></footer>
+</main>
+
+<script>
+/* ====== EDITAR ACÁ ======
+   nombre: como firma cada hermano
+   mensaje: una línea que acompaña al video
+   video: link de YouTube (no listado). Si queda vacío, la tarjeta muestra "Video en camino". */
+const APERTURA = "Mamá y papá te escribieron una carta. Nosotros también teníamos algo para decirte.";
+const FIRMA = "Te queremos. Tus hermanos y Luchi.";
+const HERMANOS = [
+  { nombre: "Hermano 1 (ejemplo)", mensaje: "Acá va una línea suya, por ejemplo un recuerdo juntos.", video: "" },
+  { nombre: "Hermano 2 (ejemplo)", mensaje: "Algo que admira de vos.", video: "" },
+  { nombre: "Luchi", mensaje: "Acá va una línea de Luchi (texto de ejemplo).", video: "" }
+];
+/* ======================== */
+
+document.getElementById("apertura").textContent = APERTURA;
+document.getElementById("firma").textContent = FIRMA;
+const ul = document.getElementById("cards");
+for (const h of HERMANOS) {
+  const li = document.createElement("li");
+  li.className = "card";
+  const n = document.createElement("p"); n.className = "name"; n.textContent = h.nombre;
+  const m = document.createElement("p"); m.className = "msg"; m.textContent = h.mensaje;
+  li.append(n, m);
+  if (h.video) {
+    const id = (h.video.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([\w-]{11})/) || [])[1];
+    if (id) {
+      const f = document.createElement("iframe");
+      f.className = "vid"; f.src = "https://www.youtube-nocookie.com/embed/" + id;
+      f.title = "Video de " + h.nombre; f.allowFullscreen = true; f.loading = "lazy";
+      f.allow = "accelerometer; encrypted-media; gyroscope; picture-in-picture";
+      li.append(f);
+    }
+    const a = document.createElement("a");
+    a.className = "play"; a.href = h.video; a.target = "_blank"; a.rel = "noopener";
+    a.innerHTML = '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 0l9 5-9 5z"/></svg>';
+    a.append(id ? "Abrir en YouTube" : "Ver el video");
+    li.append(a);
+  } else if (h.video === null) {
+    m.style.color = "var(--ink)";
+  } else {
+    const w = document.createElement("span"); w.className = "wait"; w.textContent = "Video en camino";
+    li.append(w);
+  }
+  ul.append(li);
+}
+</script>
+</body>
+</html>
