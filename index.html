@@ -67,12 +67,12 @@ footer{font-family:var(--hand);font-size:1.7rem;line-height:1.2;margin:0}
 /* ====== EDITAR ACÁ ======
    nombre: como firma cada hermano
    mensaje: una línea que acompaña al video
-   video: link de YouTube (no listado). Si queda vacío, la tarjeta muestra "Video en camino". */
+   video: link de YouTube (no listado), o archivo: nombre de un .mp4 subido al repo. Si queda vacío, la tarjeta muestra "Video en camino". */
 const APERTURA = "Mamá y papá te escribieron una carta. Nosotros también teníamos algo para decirte.";
 const FIRMA = "Te queremos. Tus hermanos y Luchi.";
 const HERMANOS = [
   { nombre: "Hermano 1 (ejemplo)", mensaje: "Acá va una línea suya, por ejemplo un recuerdo juntos.", video: "" },
-  { nombre: "Hermano 2 (ejemplo)", mensaje: "Algo que admira de vos.", video: "" },
+  { nombre: "Hermano 2 (ejemplo)", mensaje: "Airbnb en Colombia o en Brazil, Airbnb en Colombia o en Brazil 🎶🎶🎶", archivo: "hermano2.mp4" },
   { nombre: "Luchi", mensaje: "Acá va una línea de Luchi (texto de ejemplo).", video: "" }
 ];
 /* ======================== */
@@ -86,7 +86,11 @@ for (const h of HERMANOS) {
   const n = document.createElement("p"); n.className = "name"; n.textContent = h.nombre;
   const m = document.createElement("p"); m.className = "msg"; m.textContent = h.mensaje;
   li.append(n, m);
-  if (h.video) {
+  if (h.archivo) {
+    const v = document.createElement("video");
+    v.className = "vid"; v.src = h.archivo; v.controls = true; v.playsInline = true; v.preload = "metadata";
+    li.append(v);
+  } else if (h.video) {
     const id = (h.video.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([\w-]{11})/) || [])[1];
     if (id) {
       const f = document.createElement("iframe");
