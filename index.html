@@ -35,13 +35,14 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(3rem,16vw,5rem);li
 .card:nth-child(even){transform:rotate(1deg)}
 .card:hover,.card:focus-within{transform:none}
 .name{font-family:var(--hand);font-size:2.2rem;line-height:1;margin:0}
-.msg{margin:0;color:var(--soft)}
+.msg{margin:0;color:var(--soft);white-space:pre-line}
 .play{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;background:var(--sun);color:var(--sun-ink);font-weight:600;text-decoration:none;padding:12px 18px;border-radius:999px;min-height:48px}
 .play:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 .play svg{width:14px;height:14px;fill:currentColor}
 .wait{align-self:flex-start;color:var(--soft);border:1px dashed var(--line);padding:10px 16px;border-radius:999px;font-size:.95rem}
 footer{font-family:var(--hand);font-size:1.7rem;line-height:1.2;margin:0}
 @media (prefers-reduced-motion:reduce){.card{transition:none;transform:none!important}}
+.foto{width:100%;max-width:100%;border-radius:4px;display:block}
 .vid{width:100%;aspect-ratio:16/9;border:0;border-radius:4px;background:#000}
 </style>
 
@@ -71,9 +72,9 @@ footer{font-family:var(--hand);font-size:1.7rem;line-height:1.2;margin:0}
 const APERTURA = "Mamá y papá te escribieron una carta. Nosotros también teníamos algo para decirte.";
 const FIRMA = "Te queremos. Tus hermanos y Luchi.";
 const HERMANOS = [
-  { nombre: "Hermano 1 (ejemplo)", mensaje: "Acá va una línea suya, por ejemplo un recuerdo juntos.", video: "" },
-  { nombre: "Hermano 2 (ejemplo)", mensaje: "Airbnb en Colombia o en Brazil, Airbnb en Colombia o en Brazil 🎶🎶🎶", archivo: "hermano2.mp4" },
-  { nombre: "Luchi", mensaje: "Acá va una línea de Luchi (texto de ejemplo).", video: "" }
+  { nombre: "Ema", titulo: "Para Juan de Ema ♡", mensaje: "Espero que la hayas pasado bien en este viaje a Entre Ríos con amigos, ojalá lo hayas disfrutado muchos, te lo mereces, gracias por los momentos lindos que compartimos y te quiero mucho hermanito.", video: "" },
+  { nombre: "Pedro", mensaje: "Airbnb en Colombia o en Brazil, Airbnb en Colombia o en Brazil 🎶🎶🎶", archivo: "hermano2.mp4" },
+  { nombre: "Luchi", titulo: "De Luchi para Juan ♡", foto: "luchi.jpg", mensaje: "Hola mi amor, espero que estés disfrutando lo más que puedas este viaje a Entre Ríos y que la estés pasando hermoso con tus amigos. En este momento te extraño mucho y espero que vos también pq si no alta ridícula, ahre, pero bueno, voy a intentar ser breve, okey. Desde que llegaste a mi vida, hacés que todo sea más lindo, me hacés feliz de una manera tan linda que me hacés ponerme a pensar lo afortunada que soy de tenerte conmigo. Me encanta hablar con vos, escucharte, aunque a veces digas boludeces, pero bueno, viste que se le va a hacer. Te amo tanto y quiero que sepas que voy a estar con vos cuando estés feliz, emocionado, pero también cuando estés mal y no tengas ganas ni de hablar conmigo, yo voy a estar solo para hacerte compañía. Bueno, la voy cortando pq sino se hace eterna. Te amo mucho.", video: "" }
 ];
 /* ======================== */
 
@@ -83,9 +84,11 @@ const ul = document.getElementById("cards");
 for (const h of HERMANOS) {
   const li = document.createElement("li");
   li.className = "card";
-  const n = document.createElement("p"); n.className = "name"; n.textContent = h.nombre;
+  const n = document.createElement("p"); n.className = "name"; n.textContent = h.titulo || h.nombre;
   const m = document.createElement("p"); m.className = "msg"; m.textContent = h.mensaje;
-  li.append(n, m);
+  li.append(n);
+  if (h.foto) { const im = document.createElement("img"); im.className = "foto"; im.src = h.foto; im.alt = "Foto de " + h.nombre + " y Juan"; im.loading = "lazy"; li.append(im); }
+  li.append(m);
   if (h.archivo) {
     const v = document.createElement("video");
     v.className = "vid"; v.src = h.archivo; v.controls = true; v.playsInline = true; v.preload = "metadata";
@@ -107,8 +110,7 @@ for (const h of HERMANOS) {
   } else if (h.video === null) {
     m.style.color = "var(--ink)";
   } else {
-    const w = document.createElement("span"); w.className = "wait"; w.textContent = "Video en camino";
-    li.append(w);
+    m.style.color = "var(--ink)";
   }
   ul.append(li);
 }
