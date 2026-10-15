@@ -43,6 +43,8 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(3rem,16vw,5rem);li
 footer{font-family:var(--hand);font-size:1.7rem;line-height:1.2;margin:0}
 @media (prefers-reduced-motion:reduce){.card{transition:none;transform:none!important}}
 .foto{width:100%;max-width:100%;border-radius:4px;display:block}
+.carta summary{cursor:pointer;color:var(--soft);font-size:.95rem;text-decoration:underline;text-underline-offset:3px}
+.carta img{width:100%;max-width:100%;margin-top:10px;border-radius:4px;display:block}
 .vid{width:100%;aspect-ratio:16/9;border:0;border-radius:4px;background:#000}
 </style>
 
@@ -72,9 +74,9 @@ footer{font-family:var(--hand);font-size:1.7rem;line-height:1.2;margin:0}
 const APERTURA = "Mamá y papá te escribieron una carta. Nosotros también teníamos algo para decirte.";
 const FIRMA = "Te queremos. Tus hermanos y Luchi.";
 const HERMANOS = [
-  { nombre: "Ema", titulo: "Para Juan de Ema ♡", mensaje: "Espero que la hayas pasado bien en este viaje a Entre Ríos con amigos, ojalá lo hayas disfrutado muchos, te lo mereces, gracias por los momentos lindos que compartimos y te quiero mucho hermanito.", video: "" },
+  { nombre: "Ema", carta: "ema-carta.jpg", titulo: "Para Juan de Ema ♡", mensaje: "Espero que la hayas pasado bien en este viaje a Entre Ríos con amigos, ojalá lo hayas disfrutado muchos, te lo mereces, gracias por los momentos lindos que compartimos y te quiero mucho hermanito.", video: "" },
   { nombre: "Pedro", mensaje: "Airbnb en Colombia o en Brazil, Airbnb en Colombia o en Brazil 🎶🎶🎶", archivo: "hermano2.mp4" },
-  { nombre: "Luchi", titulo: "De Luchi para Juan ♡", foto: "luchi.jpg", mensaje: "Hola mi amor, espero que estés disfrutando lo más que puedas este viaje a Entre Ríos y que la estés pasando hermoso con tus amigos. En este momento te extraño mucho y espero que vos también pq si no alta ridícula, ahre, pero bueno, voy a intentar ser breve, okey. Desde que llegaste a mi vida, hacés que todo sea más lindo, me hacés feliz de una manera tan linda que me hacés ponerme a pensar lo afortunada que soy de tenerte conmigo. Me encanta hablar con vos, escucharte, aunque a veces digas boludeces, pero bueno, viste que se le va a hacer. Te amo tanto y quiero que sepas que voy a estar con vos cuando estés feliz, emocionado, pero también cuando estés mal y no tengas ganas ni de hablar conmigo, yo voy a estar solo para hacerte compañía. Bueno, la voy cortando pq sino se hace eterna. Te amo mucho.", video: "" }
+  { nombre: "Luchi", titulo: "De Luchi para Juan ♡", foto: "luchi.jpg", carta: "luchi-carta.jpg", mensaje: "Hola mi amor, espero que estés disfrutando lo más que puedas este viaje a Entre Ríos y que la estés pasando hermoso con tus amigos. En este momento te extraño mucho y espero que vos también pq si no alta ridícula, ahre, pero bueno, voy a intentar ser breve, okey. Desde que llegaste a mi vida, hacés que todo sea más lindo, me hacés feliz de una manera tan linda que me hacés ponerme a pensar lo afortunada que soy de tenerte conmigo. Me encanta hablar con vos, escucharte, aunque a veces digas boludeces, pero bueno, viste que se le va a hacer. Te amo tanto y quiero que sepas que voy a estar con vos cuando estés feliz, emocionado, pero también cuando estés mal y no tengas ganas ni de hablar conmigo, yo voy a estar solo para hacerte compañía. Bueno, la voy cortando pq sino se hace eterna. Te amo mucho.", video: "" }
 ];
 /* ======================== */
 
@@ -89,6 +91,12 @@ for (const h of HERMANOS) {
   li.append(n);
   if (h.foto) { const im = document.createElement("img"); im.className = "foto"; im.src = h.foto; im.alt = "Foto de " + h.nombre + " y Juan"; im.loading = "lazy"; li.append(im); }
   li.append(m);
+  if (h.carta) {
+    const d = document.createElement("details"); d.className = "carta";
+    const sm = document.createElement("summary"); sm.textContent = "Ver la carta escrita a mano";
+    const im = document.createElement("img"); im.src = h.carta; im.alt = "Carta de " + h.nombre + " escrita a mano"; im.loading = "lazy";
+    d.append(sm, im); li.append(d);
+  }
   if (h.archivo) {
     const v = document.createElement("video");
     v.className = "vid"; v.src = h.archivo; v.controls = true; v.playsInline = true; v.preload = "metadata";
